@@ -2,6 +2,8 @@ import express from "express";
 import { connectDB } from "./config/db.js";
 import imageRouter from "./routes/imageRoute.js";
 import userRouter from "./routes/userRoute.js";
+import formRouter from "./routes/formRoute.js";
+import reportRouter from "./routes/reportRoute.js";
 import path from "path";
 import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
@@ -28,6 +30,8 @@ app.get("/", (req, res) => {
 // api endpoints
 app.use("/api", imageRouter);
 app.use("/api", userRouter);
+app.use("/api", formRouter);
+app.use("/api", reportRouter);
 
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
