@@ -34,122 +34,171 @@ function calculateScores(data) {
 }
 
 function determineRiskCategory(scores) {
-  let riskCategory = null,
-    criteria = null,
-    clinicalIndicator = null;
+  let riskCategory, criteria, clinicalIndicator, screeningFrequency;
 
-  if (
-    scores.Skin >= 6 ||
-    scores.Nails >= 6 ||
-    scores.Deformity >= 6 ||
-    scores.Footwear >= 6 ||
-    scores["Temperature Hot"] >= 6 ||
-    scores.Ipswich >= 6
-  ) {
-    riskCategory = "High Risk";
-    criteria = "High scores in one or more categories";
-    clinicalIndicator = "High risk of foot complications";
+  if (Object.values(scores).every((v) => v >= 2)) {
+    riskCategory = "Healthy Foot - Need Self Care";
+    criteria = "Healthy foot, but needs self-care";
+    clinicalIndicator = "Monitor for skin ulcers";
+    screeningFrequency = "Every 12 months";
   } else if (
-    scores["Sensation (Monofilament)"] === 0 &&
-    scores["Sensation (Questions)"] === 0
+    scores["Pedal Pulses"] >= 3 &&
+    scores["Dependent Rubor"] >= 3 &&
+    scores.Erythema >= 3 &&
+    scores["Sensation (Monofilament)"] >= 3 &&
+    scores["Sensation (Questions)"] >= 3 &&
+    scores.Deformity >= 3
   ) {
-    riskCategory = "Very Low Risk (Category 0)";
-    criteria = "Normal – no neuropathy";
-    clinicalIndicator =
-      "No loss of protective sensation (LOPS) and no peripheral arterial disease (PAD)";
+    riskCategory = "Low Risk - Category 1";
+    criteria = "Moderate scores in arterial flow and sensation loss detected";
+    clinicalIndicator = "Retest every 6 months";
+    screeningFrequency = "Every 6 months";
   } else if (
-    scores["Sensation (Monofilament)"] >= 4 ||
-    scores["Sensation (Questions)"] >= 2
+    scores.Skin >= 6 &&
+    scores["Temperature Hot"] >= 6 &&
+    scores.Erythema >= 6
   ) {
-    if (scores.Deformity === 0) {
-      riskCategory = "Low Risk (Category 1)";
-      criteria = "Loss of protective sensation (LOPS) or PAD";
-      clinicalIndicator = "LOPS or PAD detected";
-    } else if (scores.Deformity >= 2) {
-      riskCategory = "Moderate Risk (Category 2)";
-      criteria =
-        "LOPS + PAD, or LOPS + foot deformity, or PAD + foot deformity";
-      clinicalIndicator =
-        "Presence of LOPS and PAD, or foot deformity increasing risk";
-    }
-  } else if (scores["Pedal Pulses"] === 1 || scores["Dependent Rubor"] === 1) {
-    riskCategory = "Moderate Risk (Category 2)";
-    criteria = "Peripheral arterial disease (PAD)";
+    riskCategory = "Low Risk - Category 0";
+    criteria = "Infected ulcer detected";
+    clinicalIndicator = "Needs retest every 3 days";
+    screeningFrequency = "Every 3 days";
+  } else if (
+    scores.Nails >= 6 &&
+    scores["Temperature Hot"] >= 6 &&
+    scores.Erythema >= 6
+  ) {
+    riskCategory = "Low Risk - Category 0";
+    criteria = "Infected nails detected";
+    clinicalIndicator = "Monitor for infection progression";
+    screeningFrequency = "Every 12 months";
+  } else if (
+    scores["Temperature Cold"] >= 6 &&
+    scores["Pedal Pulses"] >= 6 &&
+    scores["Dependent Rubor"] >= 6
+  ) {
+    riskCategory = "Low Risk - Category 1";
+    criteria = "Peripheral arterial disease detected";
+    clinicalIndicator = "Monitor and consult physician";
+    screeningFrequency = "Every 6 months";
+  } else if (
+    scores["Sensation (Monofilament)"] >= 6 &&
+    scores["Sensation (Questions)"] >= 6
+  ) {
+    riskCategory = "Low Risk - Category 1";
+    criteria = "Loss of sensation detected";
+    clinicalIndicator = "Indicative of neuropathy";
+    screeningFrequency = "Every 6 months";
+  } else if (
+    scores.Deformity >= 6 &&
+    (scores["Sensation (Monofilament)"] >= 6 ||
+      scores["Sensation (Questions)"] >= 6 ||
+      scores["Pedal Pulses"] >= 6)
+  ) {
+    riskCategory = "Moderate Risk - Category 2";
+    criteria = "Charcot changes detected";
     clinicalIndicator =
-      "LOPS + PAD, or LOPS + foot deformity, or PAD + foot deformity";
-  } else if (scores.Skin >= 2 || scores.Nails >= 2 || scores.Erythema >= 1) {
-    riskCategory = "High Risk (Category 3)";
-    criteria = "Previous history of ulceration or amputation";
-    clinicalIndicator =
-      "LOPS or PAD plus history of a foot ulcer, lower extremity amputation, or end-stage renal disease";
-  } else if (scores.Deformity >= 4) {
-    riskCategory = "Urgent Risk";
-    criteria = "Active ulcer, infection, or Charcot";
-    clinicalIndicator =
-      "Immediate intervention required due to presence of ulcer or active Charcot";
+      "Inflammation of bones and tissues, requires monitoring";
+    screeningFrequency = "Every 3 months";
+  } else if (scores["Sensation (Monofilament)"] >= 6 && scores.Ipswich >= 6) {
+    riskCategory = "High Risk - Category 3";
+    criteria = "Neuropathy + foot ulcer history detected";
+    clinicalIndicator = "High amputation risk, immediate attention required";
+    screeningFrequency = "Every 1 month";
+  } else if (scores["Pedal Pulses"] >= 6 && scores.Ipswich >= 6) {
+    riskCategory = "High Risk - Category 3";
+    criteria = "PAD + foot ulcer history detected";
+    clinicalIndicator = "Urgent vascular assessment needed";
+    screeningFrequency = "Every 1 month";
+  } else {
+    riskCategory = "Low Risk";
+    criteria = "No significant issues";
+    clinicalIndicator = "Minimal risk detected";
+    screeningFrequency = "Every 12 months";
   }
-  return { riskCategory, criteria, clinicalIndicator };
+
+  return { riskCategory, criteria, clinicalIndicator, screeningFrequency };
 }
 
 function interpretScores(scores) {
   let interpretation = [];
-  if (scores.Skin >= 2)
-    interpretation.push("Skin score suggests heavy callus formation.");
-  if (scores.Nails >= 2)
+  if (scores.Skin >= 2 && scores.Nails >= 2 && scores.Footwear >= 2) {
     interpretation.push(
-      "Nail score suggests possible infected or damaged nails."
+      "Self-care deficit detected. Foot hygiene and monitoring recommended."
     );
-  if (scores.Deformity >= 4)
-    interpretation.push("Deformity score suggests amputation.");
-  if (scores.Footwear >= 2)
-    interpretation.push("Footwear is causing trauma and should be replaced.");
-  if (scores["Temperature Cold"] === 1)
-    interpretation.push("Cold foot indicates possible arterial disease.");
-  if (scores["Temperature Hot"] === 1)
-    interpretation.push("Hot foot suggests infection or Charcot changes.");
-  if (scores["Range of Motion"] >= 2)
-    interpretation.push("Limited or no range of motion in the hallux.");
-  if (scores["Sensation (Monofilament)"] >= 4)
-    interpretation.push("Loss of sensation detected.");
-  if (scores["Sensation (Questions)"] >= 2)
-    interpretation.push("Numbness, tingling, or burning in the feet detected.");
-  if (scores["Pedal Pulses"] === 1)
-    interpretation.push("Absent pedal pulse indicates arterial disease.");
-  if (scores["Dependent Rubor"] === 1)
-    interpretation.push(
-      "Dependent rubor suggests peripheral arterial disease."
-    );
-  if (scores.Erythema === 1)
-    interpretation.push("Erythema suggests infection or Charcot changes.");
-  if (scores.Ipswich >= 2)
-    interpretation.push(
-      "Ipswich Touch Test indicates loss of protective sensation, increasing ulcer risk."
-    );
-  if (scores["Pedal Pulses"] === 1 && scores["Dependent Rubor"] === 1)
-    interpretation.push(
-      "Immediate referral to a vascular surgeon is recommended due to signs of arterial disease."
-    );
+  }
   if (
-    scores["Sensation (Monofilament)"] >= 4 ||
-    scores["Sensation (Questions)"] >= 2
-  )
+    scores["Pedal Pulses"] >= 5 &&
+    scores["Dependent Rubor"] >= 5 &&
+    scores.Erythema >= 5 &&
+    scores["Sensation (Monofilament)"] >= 3 &&
+    scores["Sensation (Questions)"] >= 3 &&
+    scores.Deformity >= 3
+  ) {
     interpretation.push(
-      "Loss of protective sensation (LOPS) detected, increasing risk of ulcers and amputation."
+      "Slight arterial dysfunction and sensation loss detected. Retest in 6 months."
     );
+  }
+  if (
+    scores.Skin >= 6 &&
+    scores["Temperature Hot"] >= 6 &&
+    scores.Erythema >= 6
+  ) {
+    interpretation.push(
+      "Infected ulcer detected. Requires retest every 3 days."
+    );
+  }
+  if (
+    scores.Nails >= 6 &&
+    scores["Temperature Hot"] >= 6 &&
+    scores.Erythema >= 6
+  ) {
+    interpretation.push(
+      "Infected nails detected. Watch for redness and tissue damage."
+    );
+  }
+  if (
+    scores["Temperature Cold"] >= 6 &&
+    scores["Pedal Pulses"] >= 6 &&
+    scores["Dependent Rubor"] >= 6
+  ) {
+    interpretation.push(
+      "Peripheral arterial disease detected. Consult physician immediately."
+    );
+  }
+  if (
+    scores["Sensation (Monofilament)"] >= 6 &&
+    scores["Sensation (Questions)"] >= 6
+  ) {
+    interpretation.push(
+      "Loss of sensation detected. Referral to neurology needed."
+    );
+  }
+  if (
+    scores.Deformity >= 6 &&
+    (scores["Sensation (Monofilament)"] >= 6 ||
+      scores["Sensation (Questions)"] >= 6 ||
+      scores["Pedal Pulses"] >= 6)
+  ) {
+    interpretation.push(
+      "Charcot changes detected. Requires orthopedic assessment."
+    );
+  }
   return interpretation;
 }
 
 function makeReport(data) {
   const scores = calculateScores(data);
   const interpretation = interpretScores(scores);
-  const { riskCategory, criteria, clinicalIndicator } =
+  const { riskCategory, criteria, clinicalIndicator, screeningFrequency } =
     determineRiskCategory(scores);
+
   return {
     scores,
     interpretation,
     riskCategory,
     criteria,
     clinicalIndicator,
+    screeningFrequency,
   };
 }
 
