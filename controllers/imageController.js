@@ -1,6 +1,7 @@
 import User from "../model/user.model.js";
 import fs from "fs";
 import jwt from "jsonwebtoken";
+import { v2 as cloudinary } from "cloudinary";
 
 // addItem
 const updateItem = async (req, res) => {
@@ -24,11 +25,7 @@ const updateItem = async (req, res) => {
 
   const token = authHeader.split(" ")[1];
 
-  const imageL_filename = req.files.imageL[0].filename; // Assuming `imageL` is an array
-  const imageR_filename = req.files.imageR[0].filename; // Assuming `imageR` is an array
-
   try {
-    // Verify the token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     if (!decoded || !decoded.id) {
       return res.status(401).json({
@@ -37,14 +34,24 @@ const updateItem = async (req, res) => {
       });
     }
 
-    // Update the user with the new images
+    // Upload images to Cloudinary
+    const uploadToCloudinary = async (file) => {
+      return await cloudinary.uploader.upload(file.path, {
+        folder: "user_uploads",
+      });
+    };
+
+    const imageLUpload = await uploadToCloudinary(req.files.imageL[0]);
+    const imageRUpload = await uploadToCloudinary(req.files.imageR[0]);
+
+    // Update the user with the new image URLs
     const updatedUser = await User.findByIdAndUpdate(
       decoded.id,
       {
-        imageL: imageL_filename,
-        imageR: imageR_filename,
+        imageL: imageLUpload.secure_url,
+        imageR: imageRUpload.secure_url,
       },
-      { new: true } // Return the updated document
+      { new: true }
     );
 
     if (!updatedUser) {
@@ -56,23 +63,14 @@ const updateItem = async (req, res) => {
 
     res.json({
       success: true,
-      message: "Images updated successfully.",
+      message: "Images uploaded successfully.",
       data: updatedUser,
     });
   } catch (error) {
-    if (
-      error.name === "JsonWebTokenError" ||
-      error.name === "TokenExpiredError"
-    ) {
-      return res.status(401).json({
-        success: false,
-        message: "Authentication failed. Invalid or expired token.",
-      });
-    }
-    console.error("Error updating images:", error);
+    console.error("Error uploading images:", error);
     res.status(500).json({
       success: false,
-      message: "Error updating images.",
+      message: "Error uploading images.",
     });
   }
 };
@@ -106,21 +104,21 @@ const listItem = async (req, res) => {
     }
 
     // Construct absolute URLs for the user's images
-    const userImages = {
-      ...user._doc, // Spread all user document fields
-      imageL: user.imageL
-        ? `${req.protocol}://${req.get("host")}/uploads/${user.imageL}`
-        : null, // Handle cases where imageL might be missing
-      imageR: user.imageR
-        ? `${req.protocol}://${req.get("host")}/uploads/${user.imageR}`
-        : null, // Handle cases where imageR might be missing
-    };
+    // const userImages = {
+    //   ...user._doc, // Spread all user document fields
+    //   imageL: user.imageL
+    //     ? `${req.protocol}://${req.get("host")}/uploads/${user.imageL}`
+    //     : null, // Handle cases where imageL might be missing
+    //   imageR: user.imageR
+    //     ? `${req.protocol}://${req.get("host")}/uploads/${user.imageR}`
+    //     : null, // Handle cases where imageR might be missing
+    // };
 
     // Respond with the user's image data
     res.status(200).json({
       success: true,
       message: "User images retrieved successfully.",
-      data: userImages,
+      data: user,
     });
   } catch (error) {
     console.error("Error fetching user images:", error);

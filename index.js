@@ -10,6 +10,14 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 import { config } from "dotenv";
 config();
+import { v2 as cloudinary } from "cloudinary";
+
+// Configuration
+cloudinary.config({
+  cloud_name: "dspd4gvyn",
+  api_key: "386416476746352",
+  api_secret: "YQxdZ3YiBAlxHC_xZxCw1Jwue1Y", // Click 'View API Keys' above to copy your API secret
+});
 
 // app config
 const app = express();
