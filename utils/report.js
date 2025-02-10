@@ -49,7 +49,7 @@ function determineRiskCategory(scores) {
     clinicalIndicator = "Urgent care required, immediate intervention needed";
     screeningFrequency = "Urgent care required";
   } else if (
-    scores["Sensation (Monofilament)"] >= 3 &&
+    scores["Sensation (Monofilament)"] >= 3 ||
     scores["Ipswich"] >= 1
   ) {
     riskCategory = "High Risk - Category 3";
