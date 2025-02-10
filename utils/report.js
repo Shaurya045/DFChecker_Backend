@@ -41,8 +41,8 @@ function determineRiskCategory(scores) {
 
   if (
     scores["Skin"] >= 4 &&
-    scores["Erythema"] >= 2 &&
-    scores["Temperature Hot"] >= 1
+    scores["Erythema"] >= 1 &&
+    scores["Temperature Hot"] >= 2
   ) {
     riskCategory = "Urgent Risk";
     criteria = "Active ulcer/infection/active Charcot detected";
