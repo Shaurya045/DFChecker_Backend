@@ -8,6 +8,7 @@ import path from "path";
 import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+import cors from "cors";
 import { config } from "dotenv";
 config();
 import { v2 as cloudinary } from "cloudinary";
@@ -23,6 +24,7 @@ cloudinary.config({
 const app = express();
 
 // middleware
+app.use(cors()); // Enable CORS for all routes
 app.use(express.json());
 
 // db connection
