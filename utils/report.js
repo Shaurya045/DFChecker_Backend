@@ -1,38 +1,94 @@
 // report.js
 function calculateScores(data, side) {
-  function sumScores(fields) {
-    return fields.reduce((sum, field) => {
-      // Check if the field exists and has a value for the specified side
-      if (data[field] && data[field][side] === true) {
-        return sum + 1; // Add 1 for each true value
-      }
-      return sum;
-    }, 0);
+  function scoreSkin() {
+    if (![1, 2, 3, 4].some(i => data['skin' + i]?.[side])) return 0;
+    if (data['skin4']?.[side]) return 3;
+    if (data['skin3']?.[side]) return 2;
+    if (data['skin1']?.[side] || data['skin2']?.[side]) return 1;
+    return 0;
+  }
+
+  function scoreNails() {
+    if (![1, 2, 3].some(i => data['nails' + i]?.[side])) return 0;
+    if (data['nails2']?.[side] || data['nails3']?.[side]) return 2;
+    if (data['nails1']?.[side]) return 1;
+    return 0;
+  }
+
+  function scoreDeformity() {
+    if (![1, 2, 3, 4].some(i => data['deformity' + i]?.[side])) return 0;
+    if (data['deformity4']?.[side]) return 4;
+    if (data['deformity3']?.[side]) return 3;
+    if (data['deformity2']?.[side]) return 2;
+    return 0;
+  }
+
+  function scoreFootwear() {
+    if (![1, 2, 3].some(i => data['footwear' + i]?.[side])) return 0;
+    if (data['footwear2']?.[side]) return 2;
+    if (data['footwear1']?.[side]) return 1;
+    return 0;
+  }
+
+  function scoreTemperatureCold() {
+    return data['tempCold1']?.[side] || data['tempCold2']?.[side] ? 1 : 0;
+  }
+
+  function scoreTemperatureHot() {
+    return data['tempHot1']?.[side] || data['tempHot2']?.[side] ? 1 : 0;
+  }
+
+  function scoreRangeOfMotion() {
+    for (let i = 3; i > 0; i--) {
+      if (data['motion' + i]?.[side]) return i;
+    }
+    return 0;
+  }
+
+  function scoreMonofilament() {
+    for (let i = 1; i <= 3; i++) {
+      if (data['monofilament' + i]?.[side]) return (i - 1) * 2;
+    }
+    return 0;
+  }
+
+  function scoreSensationQuestions() {
+    return [1, 2, 3, 4].some(i => data['sensation' + i]?.[side]) ? 2 : 0;
+  }
+
+  function scorePedalPulses() {
+    return data['pedal']?.[side] ? 0 : 1;
+  }
+
+  function scoreRubor() {
+    return data['rubor']?.[side] ? 1 : 0;
+  }
+
+  function scoreErythema() {
+    return data['erythema']?.[side] ? 1 : 0;
+  }
+
+  function scoreIpswich() {
+    if (data['ipswich']?.[side]) return 4;
+    if (data['ipswich1']?.[side] || data['ipswich2']?.[side]) return 2;
+    if (data['ipswich3']?.[side]) return 0;
+    return 0;
   }
 
   return {
-    Skin: sumScores(["skin1", "skin2", "skin3", "skin4"]),
-    Nails: sumScores(["nails1", "nails2", "nails3"]),
-    Deformity: sumScores(["deformity1", "deformity2", "deformity3"]),
-    Footwear: sumScores(["footwear1", "footwear2", "footwear3"]),
-    "Temperature Cold": sumScores(["tempCold1", "tempCold2"]),
-    "Temperature Hot": sumScores(["tempHot1", "tempHot2"]),
-    "Range of Motion": sumScores(["motion1", "motion2", "motion3", "motion4"]),
-    "Sensation (Monofilament)": sumScores([
-      "monofilament1",
-      "monofilament2",
-      "monofilament3",
-    ]),
-    "Sensation (Questions)": sumScores([
-      "sensation1",
-      "sensation2",
-      "sensation3",
-      "sensation4",
-    ]),
-    "Pedal Pulses": sumScores(["pedal"]),
-    "Dependent Rubor": sumScores(["rubor"]),
-    Erythema: sumScores(["erythema"]),
-    Ipswich: sumScores(["ipswich"]),
+    "Skin": scoreSkin(),
+    "Nails": scoreNails(),
+    "Deformity": scoreDeformity(),
+    "Footwear": scoreFootwear(),
+    "Temperature Cold": scoreTemperatureCold(),
+    "Temperature Hot": scoreTemperatureHot(),
+    "Range of Motion": scoreRangeOfMotion(),
+    "Sensation (Monofilament)": scoreMonofilament(),
+    "Sensation (Questions)": scoreSensationQuestions(),
+    "Pedal Pulses": scorePedalPulses(),
+    "Dependent Rubor": scoreRubor(),
+    "Erythema": scoreErythema(),
+    "Ipswich": scoreIpswich(),
   };
 }
 
