@@ -1,37 +1,94 @@
+// report.js
 function calculateScores(data, side) {
-  function sumScores(fields) {
-    return fields.reduce((sum, field) => {
-      // Check if the field exists and has a value for the specified side
-      if (data[field] && data[field][side] === true) {
-        return sum + 1; // Add 1 for each true value
-      }
-      return sum;
-    }, 0);
+  function scoreSkin() {
+    if (![1, 2, 3, 4].some(i => data['skin' + i]?.[side])) return 0;
+    if (data['skin4']?.[side]) return 3;
+    if (data['skin3']?.[side]) return 2;
+    if (data['skin1']?.[side] || data['skin2']?.[side]) return 1;
+    return 0;
+  }
+
+  function scoreNails() {
+    if (![1, 2, 3].some(i => data['nails' + i]?.[side])) return 0;
+    if (data['nails2']?.[side] || data['nails3']?.[side]) return 2;
+    if (data['nails1']?.[side]) return 1;
+    return 0;
+  }
+
+  function scoreDeformity() {
+    if (![1, 2, 3, 4].some(i => data['deformity' + i]?.[side])) return 0;
+    if (data['deformity4']?.[side]) return 4;
+    if (data['deformity3']?.[side]) return 3;
+    if (data['deformity2']?.[side]) return 2;
+    return 0;
+  }
+
+  function scoreFootwear() {
+    if (![1, 2, 3].some(i => data['footwear' + i]?.[side])) return 0;
+    if (data['footwear2']?.[side]) return 2;
+    if (data['footwear1']?.[side]) return 1;
+    return 0;
+  }
+
+  function scoreTemperatureCold() {
+    return data['tempCold1']?.[side] || data['tempCold2']?.[side] ? 1 : 0;
+  }
+
+  function scoreTemperatureHot() {
+    return data['tempHot1']?.[side] || data['tempHot2']?.[side] ? 1 : 0;
+  }
+
+  function scoreRangeOfMotion() {
+    for (let i = 3; i > 0; i--) {
+      if (data['motion' + i]?.[side]) return i;
+    }
+    return 0;
+  }
+
+  function scoreMonofilament() {
+    for (let i = 1; i <= 3; i++) {
+      if (data['monofilament' + i]?.[side]) return (i - 1) * 2;
+    }
+    return 0;
+  }
+
+  function scoreSensationQuestions() {
+    return [1, 2, 3, 4].some(i => data['sensation' + i]?.[side]) ? 2 : 0;
+  }
+
+  function scorePedalPulses() {
+    return data['pedal']?.[side] ? 0 : 1;
+  }
+
+  function scoreRubor() {
+    return data['rubor']?.[side] ? 1 : 0;
+  }
+
+  function scoreErythema() {
+    return data['erythema']?.[side] ? 1 : 0;
+  }
+
+  function scoreIpswich() {
+    if (data['ipswich']?.[side]) return 4;
+    if (data['ipswich1']?.[side] || data['ipswich2']?.[side]) return 2;
+    if (data['ipswich3']?.[side]) return 0;
+    return 0;
   }
 
   return {
-    Skin: sumScores(["skin1", "skin2", "skin3", "skin4"]),
-    Nails: sumScores(["nails1", "nails2", "nails3"]),
-    Deformity: sumScores(["deformity1", "deformity2", "deformity3"]),
-    Footwear: sumScores(["footwear1", "footwear2", "footwear3"]),
-    "Temperature Cold": sumScores(["tempCold1", "tempCold2"]),
-    "Temperature Hot": sumScores(["tempHot1", "tempHot2"]),
-    "Range of Motion": sumScores(["motion1", "motion2", "motion3", "motion4"]),
-    "Sensation (Monofilament)": sumScores([
-      "monofilament1",
-      "monofilament2",
-      "monofilament3",
-    ]),
-    "Sensation (Questions)": sumScores([
-      "sensation1",
-      "sensation2",
-      "sensation3",
-      "sensation4",
-    ]),
-    "Pedal Pulses": sumScores(["pedal"]),
-    "Dependent Rubor": sumScores(["rubor"]),
-    Erythema: sumScores(["erythema"]),
-    Ipswich: sumScores(["ipswich"]),
+    "Skin": scoreSkin(),
+    "Nails": scoreNails(),
+    "Deformity": scoreDeformity(),
+    "Footwear": scoreFootwear(),
+    "Temperature Cold": scoreTemperatureCold(),
+    "Temperature Hot": scoreTemperatureHot(),
+    "Range of Motion": scoreRangeOfMotion(),
+    "Sensation (Monofilament)": scoreMonofilament(),
+    "Sensation (Questions)": scoreSensationQuestions(),
+    "Pedal Pulses": scorePedalPulses(),
+    "Dependent Rubor": scoreRubor(),
+    "Erythema": scoreErythema(),
+    "Ipswich": scoreIpswich(),
   };
 }
 
@@ -40,23 +97,23 @@ function determineRiskCategory(scores) {
   let riskCategory, criteria, clinicalIndicator, screeningFrequency;
 
   if (
-    scores["Skin"] >= 4 &&
+    scores["Skin"] >= 3 &&
     scores["Erythema"] >= 1 &&
-    scores["Temperature Hot"] >= 2
+    scores["Temperature Hot"] >= 1
   ) {
     riskCategory = "Urgent Risk";
     criteria = "Active ulcer/infection/active Charcot detected";
     clinicalIndicator = "Urgent care required, immediate intervention needed";
     screeningFrequency = "Urgent care required";
   } else if (
-    scores["Sensation (Monofilament)"] >= 3 ||
-    scores["Ipswich"] >= 1
+    scores["Sensation (Monofilament)"] >= 4 ||
+    scores["Ipswich"] == 4
   ) {
     riskCategory = "High Risk - Category 3";
     criteria = "Neuropathy + ulcer history detected";
     clinicalIndicator = "High amputation risk";
     screeningFrequency = "Screen every 1-3 months";
-  } else if (scores["Pedal Pulses"] >= 1 && scores["Ipswich"] >= 1) {
+  } else if (scores["Pedal Pulses"] >= 1 && scores["Ipswich"] <= 2) {
     riskCategory = "High Risk - Category 3";
     criteria = "PAD + ulcer history detected";
     clinicalIndicator = "Urgent vascular assessment needed";
@@ -64,7 +121,7 @@ function determineRiskCategory(scores) {
   } else if (
     scores["Deformity"] >= 2 &&
     (scores["Sensation (Monofilament)"] >= 2 ||
-      scores["Sensation (Questions)"] >= 3 ||
+      scores["Sensation (Questions)"] >= 2 ||
       scores["Pedal Pulses"] >= 1)
   ) {
     riskCategory = "Moderate Risk - Category 2";
@@ -73,7 +130,7 @@ function determineRiskCategory(scores) {
     screeningFrequency = "Screen every 3-6 months";
   } else if (
     scores["Sensation (Monofilament)"] >= 2 ||
-    scores["Sensation (Questions)"] >= 3
+    scores["Sensation (Questions)"] >= 2
   ) {
     riskCategory = "Moderate Risk - Category 2";
     criteria = "Loss of sensation detected";
@@ -90,14 +147,14 @@ function determineRiskCategory(scores) {
     screeningFrequency = "Screen every 3-6 months";
   } else if (
     scores["Pedal Pulses"] >= 1 &&
-    scores["Sensation (Monofilament)"] >= 1 &&
+    scores["Sensation (Monofilament)"] >= 2 &&
     scores["Sensation (Questions)"] >= 2
   ) {
     riskCategory = "Low Risk - Category 1";
     criteria = "Mild arterial flow dysfunction & sensation loss";
     clinicalIndicator = "Retest every 6 months";
     screeningFrequency = "Screen every 6-12 months";
-  } else if (scores["Nails"] >= 3 || scores["Skin"] >= 3) {
+  } else if (scores["Nails"] >= 2 || scores["Skin"] >= 2) {
     riskCategory = "Low Risk - Category 1";
     criteria = "Mild infection risk detected";
     clinicalIndicator = "Monitor for progression";
@@ -127,8 +184,8 @@ function interpretScores(scores) {
 
   // Urgent Risk: Active ulcer, infection, or Charcot foot
   if (
-    scores["Skin"] >= 4 &&
-    scores["Erythema"] >= 2 &&
+    scores["Skin"] >= 3 &&
+    scores["Erythema"] >= 1 &&
     scores["Temperature Hot"] >= 1
   ) {
     interpretation.push(
@@ -137,14 +194,14 @@ function interpretScores(scores) {
   }
 
   // High Risk - Category 3: Neuropathy and ulcer history
-  if (scores["Sensation (Monofilament)"] >= 3 && scores["Ipswich"] >= 1) {
+  if (scores["Sensation (Monofilament)"] >= 4 && scores["Ipswich"] == 4) {
     interpretation.push(
       "High risk: Neuropathy with ulcer history. High amputation risk. Requires urgent specialist review."
     );
   }
 
   // High Risk - Category 3: Peripheral Arterial Disease (PAD) and ulcer history
-  if (scores["Pedal Pulses"] >= 1 && scores["Ipswich"] >= 1) {
+  if (scores["Pedal Pulses"] >= 1 && scores["Ipswich"] <= 2) {
     interpretation.push(
       "High risk: Peripheral arterial disease with ulcer history detected. Urgent vascular assessment required."
     );
@@ -154,7 +211,7 @@ function interpretScores(scores) {
   if (
     scores["Deformity"] >= 2 &&
     (scores["Sensation (Monofilament)"] >= 2 ||
-      scores["Sensation (Questions)"] >= 3 ||
+      scores["Sensation (Questions)"] >= 2 ||
       scores["Pedal Pulses"] >= 1)
   ) {
     interpretation.push(
@@ -165,7 +222,7 @@ function interpretScores(scores) {
   // Moderate Risk - Category 2: Loss of sensation (Neuropathy)
   if (
     scores["Sensation (Monofilament)"] >= 2 ||
-    scores["Sensation (Questions)"] >= 3
+    scores["Sensation (Questions)"] >= 2
   ) {
     interpretation.push(
       "Moderate risk: Loss of sensation detected, indicating neuropathy. Routine podiatric assessment advised."
@@ -186,7 +243,7 @@ function interpretScores(scores) {
   // Low Risk - Category 1: Mild arterial flow dysfunction & sensation loss
   if (
     scores["Pedal Pulses"] >= 1 &&
-    scores["Sensation (Monofilament)"] >= 1 &&
+    scores["Sensation (Monofilament)"] >= 2 &&
     scores["Sensation (Questions)"] >= 2
   ) {
     interpretation.push(
@@ -195,7 +252,7 @@ function interpretScores(scores) {
   }
 
   // Low Risk - Category 1: Mild infection risk (skin or nails)
-  if (scores["Nails"] >= 3 || scores["Skin"] >= 3) {
+  if (scores["Nails"] >= 2 || scores["Skin"] >= 2) {
     interpretation.push(
       "Low risk: Possible mild infection or fungal issues. Monitor for progression."
     );
@@ -210,7 +267,6 @@ function interpretScores(scores) {
 
   // Very Low Risk - Category 0: Normal foot
   if (interpretation.length === 0) {
-    // If no criteria match, it means minimal risk.
     interpretation.push(
       "Minimal risk detected. No significant neuropathy or vascular issues."
     );
@@ -219,6 +275,7 @@ function interpretScores(scores) {
   return interpretation;
 }
 
+// Function to generate the final report
 function makeReport(data) {
   // Extract basic questions from the data
   const basicQuestions = {
@@ -243,14 +300,14 @@ function makeReport(data) {
 
   // Create the report object
   const report = {
-    basic_questions: basicQuestions, // Add basic questions to the report
+    basic_questions: basicQuestions,
     left_foot: {
       scores: leftScores,
       risk_category: leftRisk.riskCategory,
       criteria: leftRisk.criteria,
       clinical_indicator: leftRisk.clinicalIndicator,
       screening_frequency: leftRisk.screeningFrequency,
-      interpretation: leftInterpretation, // Add interpretation for left foot
+      interpretation: leftInterpretation,
     },
     right_foot: {
       scores: rightScores,
@@ -258,11 +315,12 @@ function makeReport(data) {
       criteria: rightRisk.criteria,
       clinical_indicator: rightRisk.clinicalIndicator,
       screening_frequency: rightRisk.screeningFrequency,
-      interpretation: rightInterpretation, // Add interpretation for right foot
+      interpretation: rightInterpretation,
     },
   };
 
   return report;
 }
 
+// Export the makeReport function
 export { makeReport };
