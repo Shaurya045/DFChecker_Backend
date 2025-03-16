@@ -1,19 +1,24 @@
+// imageRoute.js
 import express from "express";
 import multer from "multer";
 import { listItem, updateItem } from "../controllers/imageController.js";
 
 const imageRouter = express.Router();
 
-// Image Storage Engine
+// Image Storage Engine for Multer
 const storage = multer.diskStorage({
-  // destination: "uploads",
+  destination: (req, file, cb) => {
+    cb(null, "uploads/"); // Save uploaded files to the "uploads" directory
+  },
   filename: (req, file, cb) => {
-    cb(null, `${Date.now()}${file.originalname}`);
+    cb(null, `${Date.now()}-${file.originalname}`); // Unique filename
   },
 });
 
+// Initialize Multer with the storage engine
 const upload = multer({ storage: storage });
 
+// Route to upload images
 imageRouter.post(
   "/upload-images",
   upload.fields([
@@ -23,8 +28,7 @@ imageRouter.post(
   updateItem
 );
 
+// Route to list images
 imageRouter.post("/list", listItem);
-
-// foodRouter.post("/remove", removeItem);
 
 export default imageRouter;

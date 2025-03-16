@@ -1,9 +1,16 @@
+// imageController.js
 import User from "../model/user.model.js";
-import fs from "fs";
 import jwt from "jsonwebtoken";
 import { v2 as cloudinary } from "cloudinary";
 
-// addItem
+// Configure Cloudinary (ensure this is done once, e.g., in your main server file)
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+// Update Item (Upload Images)
 const updateItem = async (req, res) => {
   // Ensure `req.files` is used for multiple file uploads (imageL and imageR)
   if (!req.files || !req.files.imageL || !req.files.imageR) {
@@ -26,6 +33,7 @@ const updateItem = async (req, res) => {
   const token = authHeader.split(" ")[1];
 
   try {
+    // Verify the token and decode the user ID
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     if (!decoded || !decoded.id) {
       return res.status(401).json({
@@ -61,6 +69,7 @@ const updateItem = async (req, res) => {
       });
     }
 
+    // Respond with success and the updated user data
     res.json({
       success: true,
       message: "Images uploaded successfully.",
@@ -75,7 +84,7 @@ const updateItem = async (req, res) => {
   }
 };
 
-// listItem
+// List Item (Retrieve Images)
 const listItem = async (req, res) => {
   const authHeader = req.headers.authorization;
 
@@ -103,22 +112,14 @@ const listItem = async (req, res) => {
       });
     }
 
-    // Construct absolute URLs for the user's images
-    // const userImages = {
-    //   ...user._doc, // Spread all user document fields
-    //   imageL: user.imageL
-    //     ? `${req.protocol}://${req.get("host")}/uploads/${user.imageL}`
-    //     : null, // Handle cases where imageL might be missing
-    //   imageR: user.imageR
-    //     ? `${req.protocol}://${req.get("host")}/uploads/${user.imageR}`
-    //     : null, // Handle cases where imageR might be missing
-    // };
-
     // Respond with the user's image data
     res.status(200).json({
       success: true,
       message: "User images retrieved successfully.",
-      data: user,
+      data: {
+        imageL: user.imageL,
+        imageR: user.imageR,
+      },
     });
   } catch (error) {
     console.error("Error fetching user images:", error);
