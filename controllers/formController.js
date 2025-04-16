@@ -14,10 +14,13 @@ const submitForm = async (req, res) => {
   }
 
   const token = authHeader.split(" ")[1];
-  const decoded = jwt.verify(token, process.env.JWT_SECRET);
-  const userId = decoded.id;
-  const { data } = req.body;
+  
   try {
+    // Verify the token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const userId = decoded.id;
+    const { data } = req.body;
+
     // Validate that the user exists
     const user = await User.findById(userId);
     if (!user) {
@@ -43,9 +46,28 @@ const submitForm = async (req, res) => {
     });
   } catch (error) {
     console.error("Error submitting form data:", error);
+    
+    // Handle specific JWT errors
+    if (error.name === 'TokenExpiredError') {
+      return res.status(401).json({
+        success: false,
+        message: "Session expired, please login again.",
+        expiredAt: error.expiredAt
+      });
+    }
+    
+    if (error.name === 'JsonWebTokenError') {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid token, please login again.",
+      });
+    }
+
+    // Handle other errors
     res.status(500).json({
       success: false,
       message: "An error occurred while submitting form data.",
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 };

@@ -21,7 +21,7 @@ const generateReport = async (req, res) => {
   try {
     // Get the most recent form submitted by the user
     const recentForm = await Form.findOne({ userId }).sort({ createdAt: -1 });
-    // console.log(recentForm);
+    console.log(" fffff"+ recentForm);
     if (!recentForm) {
       return res.status(404).json({
         success: false,
@@ -31,6 +31,7 @@ const generateReport = async (req, res) => {
     // console.log(form.data);
     // Generate the report from form data
     const reportData = makeReport(recentForm.data);
+    // console.log("report data" + reportData);
 
     // Save the generated report in the database
     const newReport = new Report({
@@ -40,7 +41,7 @@ const generateReport = async (req, res) => {
     });
 
     await newReport.save();
-    // console.log(newReport);
+    // pconsole.log("nnnnnnn" + newReport);
 
     res.json({
       success: true,
