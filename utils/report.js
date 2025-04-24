@@ -6,7 +6,7 @@ function questionnaire(data) {
       "amputation": data['amputation'] || false,  // Bracket notation
       "ulcer": data.ulcer ?? false,  // Nullish coalescing (ES2020)
       "smoking": 'smoking' in data ? data.smoking : false,  // Safe check
-      "end stage renal failure": data['end stage renal failure'] || false  // Bracket notation
+      "end stage renal failure": data['renalFailure'] || false  // Bracket notation
   };
 }
 function calculateScores(data, side) {
