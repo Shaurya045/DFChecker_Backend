@@ -179,8 +179,8 @@ function determineRiskCategory(scores,Answers) {
       scores['Dependent Rubor'] >= 1) &&
       Answers["end stage renal failure"] == true) {
       riskCategory = "High Risk - Category 3";
-      criteria = "Previous hx of ulceration ";
-      clinicalIndicator = "Peripheral arterial disease + end stage renal failure  ";
+      criteria = "Previous hx of end stage renal failure ";
+      clinicalIndicator = "Peripheral arterial disease + end stage renal failure ";
       screeningFrequency = "Screen every 1 months";
    }
   // else if (scores['Temperature Cold'] >= 1 && 
