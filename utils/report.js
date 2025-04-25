@@ -148,7 +148,7 @@ function determineRiskCategory(scores,Answers) {
     scores["Ipswich"] >= 4 )&& scores['Sensation (Questions)'] >= 2 &&
     Answers["end stage renal failure"] == true) {
     riskCategory = "High Risk - Category 3";
-    criteria = "previous hx of amputation";
+    criteria = "previous hx of end stage renal failure";
     clinicalIndicator = "LOPS(neuropathy) + end stage renal failure";
     screeningFrequency = "Screen every 1 months";
   // }else if (scores["Sensation (Monofilament)"] >= 4 ||
