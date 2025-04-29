@@ -387,6 +387,7 @@ function makeReport(data) {
     amputationCount: data.amputationCount,
     smoking: data.smoking,
     ulcer: data.ulcer,
+    renalFailure: data.renalFailure
   };
   //questionnaire answers
   const questionnaireAnswers = questionnaire(data);
