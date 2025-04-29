@@ -160,14 +160,14 @@ function determineRiskCategory(scores,Answers) {
     screeningFrequency = "Screen every 1 months";
   }
   
-  else if ((scores["Sensation (Monofilament)"] >= 4 ||
-    scores["Ipswich"] == 4) && scores['Sensation (Questions)'] >= 2 &&
-    (Answers["amputation"] == true && Answers["ulcer"] == true && Answers["renalFailure"] == true)) {
-    riskCategory = "High Risk - Category 3";
-    criteria = "Previous hx of ulceration, previous hx of amputation and previous hx of end stage renal failure";
-    clinicalIndicator = "LOPS(neuropathy) + history of lower limb amputation + history of foot ulcer+ end stage renal failure";
-    screeningFrequency = "Screen every 1 months";
-  }
+  // else if ((scores["Sensation (Monofilament)"] >= 4 ||
+  //   scores["Ipswich"] == 4) && scores['Sensation (Questions)'] >= 2 &&
+  //   (Answers["amputation"] == true && Answers["ulcer"] == true && Answers["renalFailure"] == true)) {
+  //   riskCategory = "High Risk - Category 3";
+  //   criteria = "Previous hx of ulceration, previous hx of amputation and previous hx of end stage renal failure";
+  //   clinicalIndicator = "LOPS(neuropathy) + history of lower limb amputation + history of foot ulcer+ end stage renal failure";
+  //   screeningFrequency = "Screen every 1 months";
+  // }
 
   else if ((scores["Sensation (Monofilament)"] >= 4 ||
     scores["Ipswich"] == 4 ) 
