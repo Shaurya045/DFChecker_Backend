@@ -228,15 +228,15 @@ function determineRiskCategory(scores,Answers) {
       screeningFrequency = "Screen every 1 months";
    }
   
-   else if ((scores['Temperature Cold'] >= 1 && 
-      scores['Pedal Pulses'] >= 1 &&
-      scores['Dependent Rubor'] >= 1) &&
-      (Answers["amputation"] == true && Answers["ulcer"] == true && Answers["renalFailure"] == true)) {
-      riskCategory = "High Risk - Category 3";
-      criteria = "Previous hx of ulceration, previous hx of amputation and previous hx of end stage renal failure";
-      clinicalIndicator = "Peripheral arterial disease + History of foot ulcer + History of lower limb amputation+ end stage renal failure";
-      screeningFrequency = "Screen every 1 months";
-  }
+  //  else if ((scores['Temperature Cold'] >= 1 && 
+  //     scores['Pedal Pulses'] >= 1 &&
+  //     scores['Dependent Rubor'] >= 1) &&
+  //     (Answers["amputation"] == true && Answers["ulcer"] == true && Answers["renalFailure"] == true)) {
+  //     riskCategory = "High Risk - Category 3";
+  //     criteria = "Previous hx of ulceration, previous hx of amputation and previous hx of end stage renal failure";
+  //     clinicalIndicator = "Peripheral arterial disease + History of foot ulcer + History of lower limb amputation+ end stage renal failure";
+  //     screeningFrequency = "Screen every 1 months";
+  // }
   
   else if ((scores['Temperature Cold'] >= 1 && 
     scores['Pedal Pulses'] >= 1 &&
