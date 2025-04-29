@@ -6,7 +6,7 @@ function questionnaire(data) {
       "amputation": data['amputation'] || false,  // Bracket notation
       "ulcer": data.ulcer ?? false,  // Nullish coalescing (ES2020)
       "smoking": 'smoking' in data ? data.smoking : false,  // Safe check
-      "end stage renal failure": data['renalFailure'] || false  // Bracket notation
+      "renalFailure": data.renalFailure ?? false  // Bracket notation
   };
 }
 function calculateScores(data, side) {
@@ -149,14 +149,14 @@ function determineRiskCategory(scores,Answers) {
     screeningFrequency = "Screen every 1 months";
   }else if ((scores["Sensation (Monofilament)"] >= 4 ||
     scores["Ipswich"] >= 4 )&& scores['Sensation (Questions)'] >= 2 &&
-    Answers["end stage renal failure"] == true) {
+    Answers["renalFailure"] == true) {
     riskCategory = "High Risk - Category 3";
     criteria = "previous hx of end stage renal failure";
     clinicalIndicator = "LOPS(neuropathy) + end stage renal failure";
     screeningFrequency = "Screen every 1 months";
   }else if (scores["Sensation (Monofilament)"] >= 4 ||
     scores["Ipswich"] == 4 && scores['Sensation (Questions)'] >= 2 &&
-    (Answers["amputation"] == true && Answers["ulcer"] == true && Answers["end stage renal failure"] == true)) {
+    (Answers["amputation"] == true && Answers["ulcer"] == true && Answers["renalFailure"] == true)) {
     riskCategory = "High Risk - Category 3";
     criteria = "Previous hx of ulceration, previous hx of amputation and previous hx of end stage renal failure";
     clinicalIndicator = "LOPS(neuropathy) + history of lower limb amputation + history of foot ulcer+ end stage renal failure";
@@ -172,7 +172,7 @@ function determineRiskCategory(scores,Answers) {
   }
   else if (scores["Sensation (Monofilament)"] >= 4 ||
     scores["Ipswich"] == 4 && scores['Sensation (Questions)'] >= 2 &&
-    (Answers["amputation"] == true  && Answers["end stage renal failure"] == true)) {
+    (Answers["amputation"] == true  && Answers["renalFailure"] == true)) {
     riskCategory = "High Risk - Category 3";
     criteria = "history of lower limb amputation and previous hx of end stage renal failure";
     clinicalIndicator = "LOPS(neuropathy) + history of lower limb amputation + end stage renal failure";
@@ -180,7 +180,7 @@ function determineRiskCategory(scores,Answers) {
   }
   else if (scores["Sensation (Monofilament)"] >= 4 ||
     scores["Ipswich"] == 4 && scores['Sensation (Questions)'] >= 2 &&
-    (Answers["ulcer"] == true && Answers["end stage renal failure"] == true)) {
+    (Answers["ulcer"] == true && Answers["renalFailure"] == true)) {
     riskCategory = "High Risk - Category 3";
     criteria = "Previous hx of ulceration and previous hx of end stage renal failure";
     clinicalIndicator = "LOPS(neuropathy) + history of foot ulcer + end stage renal failure";
@@ -205,7 +205,7 @@ function determineRiskCategory(scores,Answers) {
   }else if ((scores['Temperature Cold'] >= 1 && 
       scores['Pedal Pulses'] >= 1 &&
       scores['Dependent Rubor'] >= 1) &&
-      Answers["end stage renal failure"] == true) {
+      Answers["renalFailure"] == true) {
       riskCategory = "High Risk - Category 3";
       criteria = "Previous hx of end stage renal failure ";
       clinicalIndicator = "Peripheral arterial disease + end stage renal failure ";
@@ -214,7 +214,7 @@ function determineRiskCategory(scores,Answers) {
   else if (scores['Temperature Cold'] >= 1 && 
       scores['Pedal Pulses'] >= 1 &&
       scores['Dependent Rubor'] >= 1 &&
-      (Answers["amputation"] == true && Answers["ulcer"] == true && Answers["end stage renal failure"] == true)) {
+      (Answers["amputation"] == true && Answers["ulcer"] == true && Answers["renalFailure"] == true)) {
       riskCategory = "High Risk - Category 3";
       criteria = "Previous hx of ulceration, previous hx of amputation and previous hx of end stage renal failure";
       clinicalIndicator = "Peripheral arterial disease + History of foot ulcer + History of lower limb amputation+ end stage renal failure";
@@ -232,7 +232,7 @@ function determineRiskCategory(scores,Answers) {
     else if (scores['Temperature Cold'] >= 1 && 
       scores['Pedal Pulses'] >= 1 &&
       scores['Dependent Rubor'] >= 1 &&
-      (Answers["amputation"] == true && Answers["end stage renal failure"] == true)) {
+      (Answers["amputation"] == true && Answers["renalFailure"] == true)) {
       riskCategory = "High Risk - Category 3";
       criteria = "previous hx of amputation and previous hx of end stage renal failure ";
       clinicalIndicator = "Peripheral arterial disease + History of lower limb amputation+ end stage renal failure";
@@ -241,7 +241,7 @@ function determineRiskCategory(scores,Answers) {
     else if (scores['Temperature Cold'] >= 1 && 
       scores['Pedal Pulses'] >= 1 &&
       scores['Dependent Rubor'] >= 1 &&
-      (Answers["ulcer"] == true && Answers["end stage renal failure"] == true)) {
+      (Answers["ulcer"] == true && Answers["renalFailure"] == true)) {
       riskCategory = "High Risk - Category 3";
       criteria = "Previous hx of ulceration and previous hx of end stage renal failure";
       clinicalIndicator = "Peripheral arterial disease + History of foot ulcer + end stage renal failure";
