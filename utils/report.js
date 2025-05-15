@@ -69,9 +69,9 @@ function calculateScores(data, side) {
 
   function scoreMonofilament() {
     // For monofilament, we use the same value for both sides since it's now a single checkbox
-    if (data['monofilament3']?.value) return 4; // 0-6 sites (high risk)
-    if (data['monofilament2']?.value) return 2; // 7-9 sites (moderate risk)
-    if (data['monofilament1']?.value) return 0; // All 10 sites (normal)
+    if (data['monofilament3']?.[side]) return 4; // 0-6 sites (high risk)
+    if (data['monofilament2']?.[side]) return 2; // 7-9 sites (moderate risk)
+    if (data['monofilament1']?.[side]) return 0; // All 10 sites (normal)
     return 0; // Default if none selected
   }
 
@@ -169,34 +169,34 @@ function determineRiskCategory(scores,Answers) {
   //   screeningFrequency = "Screen every 1 months";
   // }
 
-  else if ((scores["Sensation (Monofilament)"] >= 4 ||
-    scores["Ipswich"] == 4 ) 
-    && scores['Sensation (Questions)'] >= 2 &&
-    (Answers["amputation"] == true && Answers["ulcer"] == true )) 
-    {
-    riskCategory = "High Risk - Category 3";
-    criteria = "Previous hx of ulceration and previous hx of amputation";
-    clinicalIndicator = "LOPS(neuropathy) + history of lower limb amputation + history of foot ulcer";
-    screeningFrequency = "Screen every 1 months";
-  }
+  // else if ((scores["Sensation (Monofilament)"] >= 4 ||
+  //   scores["Ipswich"] == 4 ) 
+  //   && scores['Sensation (Questions)'] >= 2 &&
+  //   (Answers["amputation"] == true && Answers["ulcer"] == true )) 
+  //   {
+  //   riskCategory = "High Risk - Category 3";
+  //   criteria = "Previous hx of ulceration and previous hx of amputation";
+  //   clinicalIndicator = "LOPS(neuropathy) + history of lower limb amputation + history of foot ulcer";
+  //   screeningFrequency = "Screen every 1 months";
+  // }
 
-  else if ((scores["Sensation (Monofilament)"] >= 4 ||
-    scores["Ipswich"] == 4) && scores['Sensation (Questions)'] >= 2 &&
-    (Answers["amputation"] == true  && Answers["renalFailure"] == true)) {
-    riskCategory = "High Risk - Category 3";
-    criteria = "history of lower limb amputation and previous hx of end stage renal failure";
-    clinicalIndicator = "LOPS(neuropathy) + history of lower limb amputation + end stage renal failure";
-    screeningFrequency = "Screen every 1 months";
-  }
+  // else if ((scores["Sensation (Monofilament)"] >= 4 ||
+  //   scores["Ipswich"] == 4) && scores['Sensation (Questions)'] >= 2 &&
+  //   (Answers["amputation"] == true  && Answers["renalFailure"] == true)) {
+  //   riskCategory = "High Risk - Category 3";
+  //   criteria = "history of lower limb amputation and previous hx of end stage renal failure";
+  //   clinicalIndicator = "LOPS(neuropathy) + history of lower limb amputation + end stage renal failure";
+  //   screeningFrequency = "Screen every 1 months";
+  // }
 
-  else if ((scores["Sensation (Monofilament)"] >= 4 ||
-    scores["Ipswich"] == 4 ) && scores['Sensation (Questions)'] >= 2 &&
-    (Answers["ulcer"] == true && Answers["renalFailure"] == true)) {
-    riskCategory = "High Risk - Category 3";
-    criteria = "Previous hx of ulceration and previous hx of end stage renal failure";
-    clinicalIndicator = "LOPS(neuropathy) + history of foot ulcer + end stage renal failure";
-    screeningFrequency = "Screen every 1 months";
-  }
+  // else if ((scores["Sensation (Monofilament)"] >= 4 ||
+  //   scores["Ipswich"] == 4 ) && scores['Sensation (Questions)'] >= 2 &&
+  //   (Answers["ulcer"] == true && Answers["renalFailure"] == true)) {
+  //   riskCategory = "High Risk - Category 3";
+  //   criteria = "Previous hx of ulceration and previous hx of end stage renal failure";
+  //   clinicalIndicator = "LOPS(neuropathy) + history of foot ulcer + end stage renal failure";
+  //   screeningFrequency = "Screen every 1 months";
+  // }
 
   else if ((scores['Temperature Cold'] >= 1 && 
       scores['Pedal Pulses'] >= 1 &&
@@ -238,39 +238,39 @@ function determineRiskCategory(scores,Answers) {
   //     screeningFrequency = "Screen every 1 months";
   // }
   
-  else if ((scores['Temperature Cold'] >= 1 && 
-    scores['Pedal Pulses'] >= 1 &&
-    scores['Dependent Rubor'] >= 1) &&
-    (Answers["amputation"] == true && Answers["ulcer"] == true)){
-    riskCategory = "High Risk - Category 3";
-    criteria = "Previous hx of ulceration and previous hx of amputation";
-    clinicalIndicator = "Peripheral arterial disease + History of foot ulcer + History of lower limb amputation";
-    screeningFrequency = "Screen every 1 months";
-    }
+  // else if ((scores['Temperature Cold'] >= 1 && 
+  //   scores['Pedal Pulses'] >= 1 &&
+  //   scores['Dependent Rubor'] >= 1) &&
+  //   (Answers["amputation"] == true && Answers["ulcer"] == true)){
+  //   riskCategory = "High Risk - Category 3";
+  //   criteria = "Previous hx of ulceration and previous hx of amputation";
+  //   clinicalIndicator = "Peripheral arterial disease + History of foot ulcer + History of lower limb amputation";
+  //   screeningFrequency = "Screen every 1 months";
+  //   }
    
-    else if ((scores['Temperature Cold'] >= 1 && 
-      scores['Pedal Pulses'] >= 1 &&
-      scores['Dependent Rubor'] >= 1 )&&
-      (Answers["amputation"] == true && Answers["renalFailure"] == true)) {
-      riskCategory = "High Risk - Category 3";
-      criteria = "previous hx of amputation and previous hx of end stage renal failure ";
-      clinicalIndicator = "Peripheral arterial disease + History of lower limb amputation+ end stage renal failure";
-      screeningFrequency = "Screen every 1 months";
-    } 
+    // else if ((scores['Temperature Cold'] >= 1 && 
+    //   scores['Pedal Pulses'] >= 1 &&
+    //   scores['Dependent Rubor'] >= 1 )&&
+    //   (Answers["amputation"] == true && Answers["renalFailure"] == true)) {
+    //   riskCategory = "High Risk - Category 3";
+    //   criteria = "previous hx of amputation and previous hx of end stage renal failure ";
+    //   clinicalIndicator = "Peripheral arterial disease + History of lower limb amputation+ end stage renal failure";
+    //   screeningFrequency = "Screen every 1 months";
+    // } 
    
-    else if ((scores['Temperature Cold'] >= 1 && 
-      scores['Pedal Pulses'] >= 1 &&
-      scores['Dependent Rubor'] >= 1) &&
-      (Answers["ulcer"] == true && Answers["renalFailure"] == true)) {
-      riskCategory = "High Risk - Category 3";
-      criteria = "Previous hx of ulceration and previous hx of end stage renal failure";
-      clinicalIndicator = "Peripheral arterial disease + History of foot ulcer + end stage renal failure";
-      screeningFrequency = "Screen every 1 months";
-    } 
+    // else if ((scores['Temperature Cold'] >= 1 && 
+    //   scores['Pedal Pulses'] >= 1 &&
+    //   scores['Dependent Rubor'] >= 1) &&
+    //   (Answers["ulcer"] == true && Answers["renalFailure"] == true)) {
+    //   riskCategory = "High Risk - Category 3";
+    //   criteria = "Previous hx of ulceration and previous hx of end stage renal failure";
+    //   clinicalIndicator = "Peripheral arterial disease + History of foot ulcer + end stage renal failure";
+    //   screeningFrequency = "Screen every 1 months";
+    // } 
 
     // Moderate risk categories
     else if (
-    scores['Deformity'] >= 4 && 
+    scores['Deformity'] >= 3 && 
     (scores['Sensation (Monofilament)'] >= 4 || scores['Ipswich'] >= 4) &&
     scores['Sensation (Questions)'] >= 2) {
     riskCategory = "Moderate Risk - Category 2";
@@ -280,14 +280,26 @@ function determineRiskCategory(scores,Answers) {
   } 
   
   else if (
-    scores['Deformity'] >= 4 &&
-    (scores['Sensation (Monofilament)'] >= 4 || scores['Ipswich'] >= 4) && scores['Sensation (Questions)'] >= 2 && scores['Temperature Cold'] >= 1 && scores['Pedal Pulses'] >= 1 && scores['Dependent Rubor'] >= 1) {
+    // (scores['Sensation (Monofilament)'] >= 4 || scores['Ipswich'] >= 4) && scores['Sensation (Questions)'] >= 2 &&
+    scores['Deformity'] >= 3 &&
+     scores['Temperature Cold'] >= 1 && scores['Pedal Pulses'] >= 1 && scores['Dependent Rubor'] >= 1) {
     riskCategory = "Moderate Risk - Category 2";
     criteria = "Boney changes parameter (Charcot changes) + peripheral arterial disease parameters.";
-    clinicalIndicator = "LOPS+foot deformity, or PAD + foot deformity";
+    clinicalIndicator = "PAD + foot deformity";
     screeningFrequency = "Screen every 3 months";
   } 
   
+  else if (
+    scores['Deformity'] >= 3 &&
+    ((scores['Sensation (Monofilament)'] >= 4 || scores['Ipswich'] >= 4) && scores['Sensation (Questions)'] >= 2 
+    && scores['Temperature Cold'] >= 1 && scores['Pedal Pulses'] >= 1 && scores['Dependent Rubor'] >= 1)) 
+    {
+    riskCategory = "Moderate Risk - Category 2";
+    criteria = "Boney changes parameter (Charcot changes) + Loss of sensation (neuropathy) + peripheral arterial disease parameters.";
+    clinicalIndicator = "LOPS + PAD + foot deformity";
+    screeningFrequency = "Screen every 3 months";
+  } 
+
   else if (
     (scores['Sensation (Monofilament)'] >= 4 || scores['Ipswich'] >= 4) &&
       scores['Sensation (Questions)'] >= 2 && 
@@ -382,7 +394,7 @@ function interpretScores(scores) {
       interpretation.push("indication of loss of protective sensation (neuropathy).");
   }
 
-  if (scores["Deformity"] >= 4 && (scores['Sensation (Monofilament)'] >= 4 || scores["Ipswich"] >= 4) && scores['Sensation (Questions)'] >= 2) {
+  if (scores["Deformity"] >= 3 && (scores['Sensation (Monofilament)'] >= 4 || scores["Ipswich"] >= 4) && scores['Sensation (Questions)'] >= 2) {
       interpretation.push("indication of Charcot changes.");
   }
 
@@ -390,7 +402,11 @@ function interpretScores(scores) {
       interpretation.push("indication of PAD + LOPS(neuropathy).");
   }
 
-  if (scores["Deformity"] >= 4 && (scores['Sensation (Monofilament)'] >= 4 || scores["Ipswich"] >= 4) && scores['Sensation (Questions)'] >= 2 && scores['Temperature Cold'] >= 4 && scores['Pedal Pulses'] >= 1 && scores['Dependent Rubor'] >= 1) {
+  if (scores["Deformity"] >= 3 && (scores['Sensation (Monofilament)'] >= 4 || scores["Ipswich"] >= 4) && scores['Sensation (Questions)'] >= 2 && scores['Temperature Cold'] >= 4 && scores['Pedal Pulses'] >= 1 && scores['Dependent Rubor'] >= 1) {
+      interpretation.push("indication of charcot changes + indication of peripheral arterial disease + LOPS(neuropathy).");
+  }
+
+  if (scores["Deformity"] >= 3 && scores['Temperature Cold'] >= 4 && scores['Pedal Pulses'] >= 1 && scores['Dependent Rubor'] >= 1) {
       interpretation.push("indication of charcot changes + indication of peripheral arterial disease.");
   }
 
