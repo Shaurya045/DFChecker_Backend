@@ -386,11 +386,11 @@ function interpretScores(scores) {
       interpretation.push("Infected ulcer, no complications. See physician for dressing and antibiotics.");
   }
 
-  if ((scores['Temperature Cold'] >= 1 && scores['Pedal Pulses'] >= 1 && scores['Dependent Rubor'] >= 1) && ((Answers["amputation"] == true || Answers["ulcer"] == true || Answers["renalFailure"] == true)) ){
+  if ((scores['Temperature Cold'] >= 1 && scores['Pedal Pulses'] >= 1 && scores['Dependent Rubor'] >= 1)  ){
       interpretation.push("indication of peripheral arterial disease.");
   }
 
-  if (((scores['Sensation (Monofilament)'] >= 4 || scores["Ipswich"] >= 4) && scores['Sensation (Questions)'] >= 2) && (Answers["amputation"] == true || Answers["ulcer"] == true || Answers["renalFailure"] == true)){
+  if (((scores['Sensation (Monofilament)'] >= 4 || scores["Ipswich"] >= 4) && scores['Sensation (Questions)'] >= 2) ){
       interpretation.push("indication of loss of protective sensation (neuropathy).");
   }
 
@@ -406,7 +406,7 @@ function interpretScores(scores) {
       interpretation.push("indication of charcot changes + indication of peripheral arterial disease + LOPS(neuropathy).");
   }
 
-  if (scores["Deformity"] >= 3 && scores['Temperature Cold'] >= 4 && scores['Pedal Pulses'] >= 1 && scores['Dependent Rubor'] >= 1) {
+  if ( scores['Temperature Cold'] >= 4 && scores['Pedal Pulses'] >= 1 && scores['Dependent Rubor'] >= 1) {
       interpretation.push("indication of charcot changes + indication of peripheral arterial disease.");
   }
 
