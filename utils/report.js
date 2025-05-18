@@ -351,6 +351,14 @@ else if ((scores['Sensation (Monofilament)'] >= 4 || scores['Ipswich'] >= 4) && 
     screeningFrequency = "Screen every 6 months";
 }
 
+else if ((scores['Sensation (Monofilament)'] >= 4 || scores['Ipswich'] >= 4) && scores['Sensation (Questions)'] >= 2 && (scores['Temperature Cold'] >= 1 && scores['Pedal Pulses'] >= 1 && scores['Dependent Rubor'] >= 1)) {
+    // High score in parameters 8 and 9 -> indicative of loss of sensation-neuropathy
+    riskCategory = "Moderate Risk - Category 2";
+    criteria = "LOPS AND PAD";
+    clinicalIndicator = "Loss of sensation-neuropathy and peripheral arterial disease";
+    screeningFrequency = "Screen every 3 months";
+}
+
 //Healthy foot - need self care
 
 else if (
@@ -375,7 +383,6 @@ else if (
     clinicalIndicator = "No LOPS + No PAD";
     screeningFrequency = "Screen Every 12 months";
   }
-else {}
   return { riskCategory, criteria, clinicalIndicator, screeningFrequency };
 }
 
