@@ -269,7 +269,18 @@ function determineRiskCategory(scores,Answers) {
     // } 
 
     // Moderate risk categories
-    else if (
+  else if (
+    scores['Deformity'] >= 3 &&
+    ((scores['Sensation (Monofilament)'] >= 4 || scores['Ipswich'] >= 4) && scores['Sensation (Questions)'] >= 2 
+    && scores['Temperature Cold'] >= 1 && scores['Pedal Pulses'] >= 1 && scores['Dependent Rubor'] >= 1)) 
+    {
+    riskCategory = "Moderate Risk - Category 2";
+    criteria = "Boney changes parameter (Charcot changes) + Loss of sensation (neuropathy) + peripheral arterial disease parameters.";
+    clinicalIndicator = "LOPS + PAD + foot deformity";
+    screeningFrequency = "Screen every 3 months";
+  } 
+
+  else if (
     scores['Deformity'] >= 3 && 
     (scores['Sensation (Monofilament)'] >= 4 || scores['Ipswich'] >= 4) &&
     scores['Sensation (Questions)'] >= 2) {
@@ -289,17 +300,6 @@ function determineRiskCategory(scores,Answers) {
     screeningFrequency = "Screen every 3 months";
   } 
   
-  else if (
-    scores['Deformity'] >= 3 &&
-    ((scores['Sensation (Monofilament)'] >= 4 || scores['Ipswich'] >= 4) && scores['Sensation (Questions)'] >= 2 
-    && scores['Temperature Cold'] >= 1 && scores['Pedal Pulses'] >= 1 && scores['Dependent Rubor'] >= 1)) 
-    {
-    riskCategory = "Moderate Risk - Category 2";
-    criteria = "Boney changes parameter (Charcot changes) + Loss of sensation (neuropathy) + peripheral arterial disease parameters.";
-    clinicalIndicator = "LOPS + PAD + foot deformity";
-    screeningFrequency = "Screen every 3 months";
-  } 
-
   else if (
     (scores['Sensation (Monofilament)'] >= 4 || scores['Ipswich'] >= 4) &&
       scores['Sensation (Questions)'] >= 2 && 
