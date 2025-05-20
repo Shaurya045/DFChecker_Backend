@@ -7,11 +7,11 @@ const imageRouter = express.Router();
 
 // Image Storage Engine for Multer
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/"); // Save uploaded files to the "uploads" directory
-  },
+  // destination: (req, file, cb) => {
+  //   cb(null, "uploads/"); // Save uploaded files to the "uploads" directory
+  // },
   filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`); // Unique filename
+    return cb(null, `${Date.now()}-${file.originalname}`); // Unique filename
   },
 });
 
