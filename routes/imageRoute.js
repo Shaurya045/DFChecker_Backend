@@ -1,33 +1,34 @@
+// imageRoute.js
 import express from "express";
 import multer from "multer";
 import { listItem, updateItem } from "../controllers/imageController.js";
-import { verifyToken } from "../middleware/authMiddleware.js"; // Add this import
 
 const imageRouter = express.Router();
 
 // Image Storage Engine for Multer
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "uploads/");
+    cb(null, "uploads/"); // Save uploaded files to the "uploads" directory
   },
   filename: (req, file, cb) => {
-    cb(null, `${Date.now()}-${file.originalname}`);
+    cb(null, `${Date.now()}-${file.originalname}`); // Unique filename
   },
 });
 
+// Initialize Multer with the storage engine
 const upload = multer({ storage: storage });
 
-// Add verifyToken middleware before upload
+// Route to upload images
 imageRouter.post(
   "/upload-images",
-  verifyToken, // Add this authentication middleware
   upload.fields([
-    { name: "imageL", maxCount: 1 },
-    { name: "imageR", maxCount: 1 },
+    { name: "imageL", maxCount: 1 }, // Expecting one file for "imageL"
+    { name: "imageR", maxCount: 1 }, // Expecting one file for "imageR"
   ]),
   updateItem
 );
 
-imageRouter.post("/list", verifyToken, listItem); // Also protect this route
+// Route to list images
+imageRouter.post("/list", listItem);
 
 export default imageRouter;
