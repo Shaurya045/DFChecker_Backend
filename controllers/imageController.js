@@ -2,6 +2,8 @@
 import User from "../model/user.model.js";
 import jwt from "jsonwebtoken";
 import { v2 as cloudinary } from "cloudinary";
+import { config } from "dotenv";
+config();
 
 // Configure Cloudinary (ensure this is done once, e.g., in your main server file)
 cloudinary.config({
