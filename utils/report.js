@@ -315,7 +315,7 @@ function determineRiskCategory(scores,Answers) {
     // Moderate score in parameters 4 and 7 -> indicative of callus formation
     riskCategory = "Low Risk - Category 0";
     criteria = "Normal – no neuropathy";
-    clinicalIndicator = "indicative of callus formation";
+    clinicalIndicator = "indicative of corn formation";
     screeningFrequency = "Screen every 6 months";
 } 
 
@@ -422,7 +422,7 @@ function interpretScores(scores) {
   }
 
   if (scores["Footwear"] >= 1 && scores['Range of Motion'] >= 2) {
-      interpretation.push("indication of callous formation.");
+      interpretation.push("indication of corn formation.");
   }
 
   if (scores["Skin"] >= 3 && scores["Nails"] >= 2 && scores["Footwear"] >= 2) {
