@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 const registerUser = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email,isDoctor, password } = req.body;
 
   // Basic validation
   if (!name || !email || !password) {
@@ -31,6 +31,7 @@ const registerUser = async (req, res) => {
     const newUser = await User.create({
       name,
       email,
+      isDoctor,
       password: hashedPassword,
     });
 
@@ -41,6 +42,7 @@ const registerUser = async (req, res) => {
         id: newUser._id,
         name: newUser.name,
         email: newUser.email,
+        isDoctor: newUser.isDoctor,
       },
     });
   } catch (error) {

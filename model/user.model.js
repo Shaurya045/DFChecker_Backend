@@ -9,6 +9,10 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  isDoctor: {
+    type: Boolean,
+    default: false,
+  },
   password: {
     type: String,
     required: true,
