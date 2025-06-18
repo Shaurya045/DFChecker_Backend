@@ -92,6 +92,7 @@ const loginUser = async (req, res) => {
       success: true,
       message: "User logged in successfully.",
       token,
+      isDoctor: user.isDoctor,
     });
   } catch (error) {
     console.error(error);
